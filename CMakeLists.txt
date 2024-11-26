@@ -12,7 +12,7 @@ endif()
 project ("ABProgramming RBC")
 
 # Agregue un origen al ejecutable de este proyecto.
-add_executable (CMakeTarget "ABProgramming RBC.cpp" "ABProgramming RBC.h")
+add_executable (CMakeTarget "ABProgramming RBC.cpp" "ABProgramming RBC.h" "HistorialClinico.h" "HistorialClinico.cpp")
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET CMakeTarget PROPERTY CXX_STANDARD 20)
