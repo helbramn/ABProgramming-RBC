@@ -1,9 +1,21 @@
 
-#include "Paciente.h"
+#include "Paciente.hpp"
 #include <iostream>
 
-Paciente::Paciente(const std::string& nombre) : nombre(nombre) {}
+using namespace std;
 
-void Paciente::mostrarNombre() const {
-    std::cout << "Nombre del paciente: " << nombre << std::endl;
+Paciente::Paciente(const string& nombre, string& dni, string& fechaIngreso) {
+    : nombre(nombre), dni(dni), fechaIngreso(fechaIngreso) {}
+
+const string& Paciente::getDNI() const {
+    return dni;
+}
+
+void Paciente::registrarDiagnostico(const string& diagnostico) {
+    historial.agregarDiagnostico(diagnostico);
+}
+
+void Paciente::consultarHistorial() const {
+    cout << "Historial del paciente: " << nombre << " (DNI: " << dni << ")" << endl;
+    historial.consultarHistorial();
 }
