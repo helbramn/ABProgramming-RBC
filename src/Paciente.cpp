@@ -18,4 +18,4 @@ void Paciente::registrarDiagnostico(const string& diagnostico) {
 void Paciente::consultarHistorial() const {
     cout << "Historial del paciente: " << nombre << " (DNI: " << dni << ")" << endl;
     historial.consultarHistorial();
-}
+};
