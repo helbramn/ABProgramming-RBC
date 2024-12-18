@@ -6,21 +6,30 @@ Gestion::Gestion() {}
 Gestion::~Gestion() {
     for (auto p : pacientes) delete p;
     for (auto m : medicos) delete m;
-    // Error: Falta liberar memoria de citas
+    for (auto c : citas) delete c;
 }
 
 void Gestion::registrarPaciente() {
     std::string nombre, dni, fechaIngreso;
     std::cout << "Ingrese el nombre del paciente: ";
-    std::cin >> nombre; // Error: No permite nombres con espacios
+    std::cin >> nombre;
     std::cout << "Ingrese el DNI del paciente: ";
     std::cin >> dni;
-    pacientes.push_back(new Paciente(nombre, dni, fechaIngreso)); // Error: Falta validación del DNI
+    std::cout << "Ingrese la fecha de ingreso: ";
+    std::cin >> fechaIngreso;
+
+    pacientes.push_back(new Paciente(nombre, dni, fechaIngreso));
     std::cout << "Paciente registrado con éxito." << std::endl;
 }
 
 void Gestion::registrarMedico() {
-    // ...
+    std::string nombre, especialidad;
+    std::cout << "Ingrese el nombre del médico: ";
+    std::cin >> nombre;
+    std::cout << "Ingrese la especialidad del médico: ";
+    std::cin >> especialidad;
+
+    medicos.push_back(new Medico(nombre, especialidad));
     std::cout << "Médico registrado con éxito." << std::endl;
 }
 
@@ -28,13 +37,28 @@ void Gestion::agendarCita() {
     std::string fecha, hora, dniPaciente, nombreMedico;
     std::cout << "Ingrese la fecha de la cita (YYYY-MM-DD): ";
     std::cin >> fecha;
+    std::cout << "Ingrese la hora de la cita (HH:MM): ";
+    std::cin >> hora;
+    std::cout << "Ingrese el DNI del paciente: ";
+    std::cin >> dniPaciente;
     std::cout << "Ingrese el nombre del médico: ";
     std::cin >> nombreMedico;
 
+    Paciente* paciente = nullptr;
+    Medico* medico = nullptr;
+
+    for (auto p : pacientes) {
+        if (p->getDNI() == dniPaciente) {
+            paciente = p;
+            break;
+        }
+    }
+
     for (auto m : medicos) {
-        if (m->getNombre() == nombreMedico) {
+        if (m->getNombre() == nombreMedico && m->isDisponible()) {
             medico = m;
-            break; // Error: No revisa disponibilidad del médico
+            medico->setDisponibilidad(false);
+            break;
         }
     }
 
@@ -43,6 +67,21 @@ void Gestion::agendarCita() {
         std::cout << "Cita agendada con éxito." << std::endl;
     }
     else {
-        std::cout << "Error al agendar la cita: datos incorrectos." << std::endl;
+        std::cout << "Error al agendar la cita: paciente o médico no encontrado/disponible." << std::endl;
     }
+}
+
+void Gestion::consultarHistorial() {
+    std::string dni;
+    std::cout << "Ingrese el DNI del paciente: ";
+    std::cin >> dni;
+
+    for (auto p : pacientes) {
+        if (p->getDNI() == dni) {
+            p->consultarHistorial();
+            return;
+        }
+    }
+
+    std::cout << "Paciente no encontrado." << std::endl;
 }
