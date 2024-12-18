@@ -13,6 +13,7 @@ private:
 public:
     Medico(const std::string& nombre, const std::string& especialidad);
     const std::string& getEspecialidad() const;
+    const std::string& getNombre() const;
     bool isDisponible() const;
     void setDisponibilidad(bool estado);
 };

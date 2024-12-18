@@ -23,7 +23,7 @@ void mostrarMenu() {
 
 int main() {
     int opcion = 0;
-    Gestion gestion; // Clase que centraliza las operaciones
+    Gestion gestion; 
 
     do {
         mostrarMenu();

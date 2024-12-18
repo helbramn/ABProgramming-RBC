@@ -2,6 +2,7 @@
 #define HISTORIALCLINICO_HPP
 
 #include <vector>
+#include <string>
 
 class HistorialClinico {
 private:

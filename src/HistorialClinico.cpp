@@ -2,7 +2,7 @@
 #include <iostream>
 
 void HistorialClinico::agregarDiagnostico(const std::string& diagnostico) {
-    diagnosticos.pull_back(diagnostico);
+    diagnosticos.push_back(diagnostico);
 }
 
 void HistorialClinico::consultarHistorial() const {

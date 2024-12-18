@@ -10,6 +10,10 @@ const string& Medico::getEspecialidad() const {
     return especialidad;
 }
 
+const string& Medico::getNombre() const {
+    return especialidad;
+}
+
 bool Medico::isDisponible() const {
     return disponible;
 }

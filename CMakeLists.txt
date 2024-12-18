@@ -12,7 +12,7 @@ endif()
 project ("ABProgramming RBC")
 
 # Agregue un origen al ejecutable de este proyecto.
-add_executable (CMakeTarget "src/ABProgramming RBC.cpp"   "src/HistorialClinico.cpp"  "src/Paciente.cpp"  "src/Medico.cpp")
+add_executable (CMakeTarget "src/ABProgramming RBC.cpp"   "src/HistorialClinico.cpp"  "src/Paciente.cpp"  "src/Medico.cpp" "src/Cita.cpp" "src/Gestion.cpp")
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET CMakeTarget PROPERTY CXX_STANDARD 20)
@@ -22,5 +22,5 @@ endif()
 
 include_directories(include)
 file(GLOB SOURCES "src/*.cpp")
-add_executable(ABProgramming ${SOURCES})
+add_executable(ABProgramming ${SOURCES} "src/Cita.cpp" "src/Gestion.cpp")
 
