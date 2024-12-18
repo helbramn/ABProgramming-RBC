@@ -1,9 +1,12 @@
 #include "Medico.hpp"
+#include <iostream>
 
-Medico::Medico(const std::string& nombre, const std::string& especialidad)
+using namespace std;
+
+Medico::Medico(const string& nombre, const string& especialidad)
     : nombre(nombre), especialidad(especialidad), disponible(true) {}
 
-const std::string& Medico::getEspecialidad() const {
+const string& Medico::getEspecialidad() const {
     return especialidad;
 }
 

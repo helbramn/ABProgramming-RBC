@@ -1,13 +1,13 @@
-#include "HistorialClinico.h"
-#include <iostream> 
+#include "HistorialClinico.hpp"
+#include <iostream>
 
-void HistorialClinico::agregarRegistro(const std::string& registro) {
-    registros.push_back(registro);
+void HistorialClinico::agregarDiagnostico(const std::string& diagnostico) {
+    diagnosticos.pull_back(diagnostico);
 }
 
-void HistorialClinico::mostrarRegistros() const {
-    std::cout << "Registros de Historial Clínico:" << std::endl;
-    for (const auto& registro : registros) {
-        std::cout << registro << std::endl;
+void HistorialClinico::consultarHistorial() const {
+    std::cout << "Diagnósticos registrados:" << std::endl;
+    for (const auto& diag : diagnosticos) {
+        std::cout << "- " << diag << std::endl;
     }
 }
