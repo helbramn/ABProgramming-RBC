@@ -1,5 +1,6 @@
 #include "Cita.hpp"
 #include <iostream>
+#include <algorithm>
 
 Cita::Cita(const std::string& fecha, const std::string& hora, int urgencia, Paciente* paciente, Medico* medico)
     : fecha(fecha), hora(hora), urgencia(urgencia), paciente(paciente), medico(medico) {}
@@ -12,13 +13,28 @@ void Cita::mostrarCita() const {
 }
 
 void Cita::cancelarCita() {
-    fecha = ""; 
-    hora = "";
+    if (fecha.empty() && hora.empty()) {
+        std::cout << "La cita ya está cancelada." << std::endl;
+        return false;
+    }
+    fecha.clear(); 
+    hora.clear();
+    std::cout << "Cita cancelada con éxito." << std::endl;
+    return true;
 }
 
 void Cita::modificarCita() {
-    std::cout << "Ingrese la nueva fecha: ";
+    std::cout << "Ingrese la nueva fecha (DD-MM-YYYY): ";
     std::cin >> fecha;
-    std::cout << "Ingrese la nueva hora: ";
+    std::cout << "Ingrese la nueva hora (HH:MM): ";
     std::cin >> hora;
+    std::cout << "Cita modificada con éxito." << std::endl;
+}
+
+void Cita::ordenarCitasPorFecha(std::vector<Cita*>& citas) {
+    std::sort(citas.begin(), citas.end(), [](Cita* a, Cita* b) {
+        return a->fecha < b->fecha; // Compara las fechas
+        });
+
+    std::cout << "Citas ordenadas por fecha." << std::endl;
 }

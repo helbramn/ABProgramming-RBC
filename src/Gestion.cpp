@@ -3,73 +3,77 @@
 #include <fstream>
 #include <algorithm> 
 #include <sstream>   
-Gestion::Gestion() {}
 
+Gestion::Gestion() {}
 Gestion::~Gestion() {
     for (auto p : pacientes) delete p;
     for (auto m : medicos) delete m;
     for (auto c : citas) delete c;
 }
-void Gestion::guardarDatos() {
-    std::ofstream archivoPacientes("pacientes.txt");
-    for (auto p : pacientes) {
-        archivoPacientes << p->getID() << "," << p->getDNI() << "," << p->getNombre() << "\n";
-    }
-    archivoPacientes.close();
+void Gestion::registrarPaciente() {
+    std::string nombre, dni, fechaIngreso;
+    std::cout << "Ingrese el nombre del paciente: ";
+    std::cin.ignore();
+    std::getline(std::cin, nombre); 
+    std::cout << "Ingrese el DNI del paciente: ";
+    std::cin >> dni;
+    std::cout << "Ingrese la fecha de ingreso (YYYY-MM-DD): ";
+    std::cin >> fechaIngreso;
 
-    std::ofstream archivoMedicos("medicos.txt");
-    for (auto m : medicos) {
-        archivoMedicos << m->getNombre() << "," << m->getEspecialidad() << "\n";
-    }
+    pacientes.push_back(new Paciente(nombre, dni, fechaIngreso));
+    std::cout << "Paciente registrado con éxito." << std::endl;
 }
-void Gestion::cargarDatos() {
-    std::ifstream archivoPacientes("pacientes.txt");
-    std::string linea;
-    while (getline(archivoPacientes, linea)) {
-        std::istringstream stream(linea);
-        std::string nombre, dni, fechaIngreso;
-        getline(stream, nombre, ','); 
-        getline(stream, fechaIngreso, ',');
-        pacientes.push_back(new Paciente(nombre, dni, fechaIngreso));
-    }
-    archivoPacientes.close();
-
-    std::ifstream archivoMedicos("medicos.txt");
-    while (getline(archivoMedicos, linea)) {
-        std::istringstream stream(linea);
-        std::string nombre, especialidad;
-        getline(stream, nombre, ',');
-        getline(stream, especialidad, ',');
-        medicos.push_back(new Medico(nombre, especialidad));
-    }
-    archivoMedicos.close();
-}
-
-void Gestion::reportePacientesPorFecha(const std::string& fechaInicio, const std::string& fechaFin) {
-    std::cout << "Pacientes atendidos entre " << fechaInicio << " y " << fechaFin << ":\n";
-    for (auto p : pacientes) {
-        if (p->getFechaIngreso() >= fechaInicio && p->getFechaIngreso() <= fechaFin) {
-            std::cout << p->getNombre() << "\n";
+void Gestion::generarReporte(const std::string& tipo) {
+    if (tipo == "pacientes") {
+        std::cout << "Reporte de pacientes:" << std::endl;
+        for (const auto& p : pacientes) {
+            std::cout << "- " << p->getID() << ": " << p->getNombre() << std::endl;
         }
     }
-}
-
-void Gestion::reporteCitasPorEspecialidad(const std::string& especialidad) {
-    std::cout << "Citas pendientes para la especialidad: " << especialidad << "\n";
-    for (auto c : citas) {
-        if (c->getMedico()->getNombre() == especialidad) {
+    else if (tipo == "citas") {
+        std::cout << "Reporte de citas:" << std::endl;
+        for (const auto& c : citas) {
             c->mostrarCita();
         }
     }
+    else {
+        std::cout << "Tipo de reporte no reconocido." << std::endl;
+    }
 }
 
-// Ordenación
-void Gestion::ordenarCitasPorFecha() {
-    std::sort(citas.begin(), citas.end(), [](Cita* a, Cita* b) {
-        return a->getFecha() < b->getFecha();
-        });
-    // Error: Olvidé verificar si el vector de citas está vacío.
-    for (auto c : citas) {
-        c->mostrarCita();
+void Gestion::guardarEnArchivo() {
+    std::ofstream archivo("datos.csv");
+    if (!archivo.is_open()) {
+        std::cout << "Error al abrir el archivo para guardar." << std::endl;
+        return;
     }
+
+    archivo << "Pacientes\n";
+    for (const auto& p : pacientes) {
+        archivo << p->getID() << "," << p->getNombre() << "," << p->getFechaIngreso() << "\n";
+    }
+
+    archivo << "Medicos\n";
+    for (const auto& m : medicos) {
+        archivo << m->getNombre() << "," << m->getEspecialidad() << "," << m->isDisponible() << "\n";
+    }
+
+    archivo.close();
+    std::cout << "Datos guardados en datos.csv" << std::endl;
+}
+
+void Gestion::cargarDesdeArchivo() {
+    std::ifstream archivo("datos.csv");
+    if (!archivo.is_open()) {
+        std::cout << "Error al abrir el archivo para cargar." << std::endl;
+        return;
+    }
+
+    std::string linea;
+    while (std::getline(archivo, linea)) {
+        std::cout << linea << std::endl; // Imprime las líneas cargadas
+    }
+
+    archivo.close();
+    std::cout << "Datos cargados desde datos.csv" << std::endl;
 }

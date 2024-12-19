@@ -17,6 +17,7 @@ public:
     void agregarReceta(const std::string& receta); 
     void agregarCirugia(const std::string& cirugia); 
     void consultarHistorial() const;
+    void buscarPorTipo(const std::string& tipo) const; 
 };
 
 #endif

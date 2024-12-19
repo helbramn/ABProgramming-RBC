@@ -2,6 +2,7 @@
 #define GESTION_HPP
 
 #include <vector>
+#include <string>
 #include "Paciente.hpp"
 #include "Medico.hpp"
 #include "Cita.hpp"
@@ -15,11 +16,13 @@ private:
 public:
     Gestion();
     ~Gestion();
-    void guardarDatos();
-    void cargarDatos();
-    void reportePacientesPorFecha(const std::string& fechaInicio, const std::string& fechaFin);
-    void reporteCitasPorEspecialidad(const std::string& especialidad);
-    void ordenarCitasPorFecha();
+    void registrarPaciente();
+    void registrarMedico();
+    void agendarCita();
+    void consultarHistorial();
+    void generarReporte(const std::string& tipo); 
+    void guardarEnArchivo(); 
+    void cargarDesdeArchivo(); 
 };
 
 #endif

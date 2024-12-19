@@ -16,6 +16,8 @@ public:
     Paciente(const std::string& nombre, const std::string& dni, const std::string& fechaIngreso);
     const std::string& getID() const;
     const std::string& getDNI() const;
+    const std::string& getNombre() const;
+    const std::string& getFechaIngreso() const;
     void modificarDatos();
     bool validarDNI(const std::string& dni);  
     bool buscarPaciente(const std::string& criterio);

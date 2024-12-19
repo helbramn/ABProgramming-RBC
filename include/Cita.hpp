@@ -16,8 +16,9 @@ private:
 public:
     Cita(const std::string& fecha, const std::string& hora, int urgencia, Paciente* paciente, Medico* medico);
     void mostrarCita() const;
-    void cancelarCita();
+    bool cancelarCita();
     void modificarCita();
+    static void ordenarCitasPorFecha(std::vector<Cita*>& citas);
 };
 
 #endif

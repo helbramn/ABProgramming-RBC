@@ -4,28 +4,37 @@
 Paciente::Paciente(const std::string& nombre, const std::string& dni, const std::string& fechaIngreso)
     : nombre(nombre), dni(dni), fechaIngreso(fechaIngreso) {
     if (!validarDNI(dni)) {
-        std::cout << "Error: Formato de DNI inválido." << std::endl; 
+        throw std::invalid_argument("Formato de DNI inválido.");
     }
-    id = dni + "_ID"; 
+    id = "PAC_" + dni;
 }
 
 const std::string& Paciente::getID() const {
-    return dni; 
+    return id; 
 }
 
 const std::string& Paciente::getDNI() const {
     return dni;
 }
 
+const std::string& Paciente::getNombre() const {
+    return nombre;
+}
+
+const std::string& Paciente::getFechaIngreso() const {
+    return fechaIngreso;
+}
+
 void Paciente::modificarDatos() {
     std::cout << "Ingrese el nuevo nombre: ";
-    std::cin >> nombre; 
+    std::cin.ignore();
+    std::getline(std::cin, nombre);
     std::cout << "Ingrese la nueva fecha de ingreso: ";
     std::cin >> fechaIngreso;
 }
 
 bool Paciente::validarDNI(const std::string& dni) {
-    std::regex formatoDNI("[0-9]{8}[A-Z]"); 
+    std::regex formatoDNI("[0-9]{8}[A-Za-z]"); 
     return std::regex_match(dni, formatoDNI);
 }
 
@@ -34,6 +43,7 @@ bool Paciente::buscarPaciente(const std::string& criterio) {
         std::cout << "Paciente encontrado: " << nombre << " (ID: " << id << ", DNI: " << dni << ")" << std::endl;
         return true;
     }
+    std::cout << "Paciente no encontrado." << std::endl;
     return false;
 }
 

@@ -3,6 +3,7 @@
 #define MEDICO_HPP
 
 #include <string>
+#include <vector>
 
 class Medico {
 private:
@@ -16,7 +17,7 @@ public:
     const std::string& getNombre() const;
     bool isDisponible() const;
     void setDisponibilidad(bool estado);
-    void listarPorEspecialidad(const std::string& especialidad);
+    static void listarPorEspecialidad(const std::vector<Medico*>& medicos, const std::string& especialidad);
 };
 
 #endif
