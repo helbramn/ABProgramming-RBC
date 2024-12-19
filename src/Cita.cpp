@@ -12,7 +12,7 @@ void Cita::mostrarCita() const {
     std::cout << "Urgencia: " << urgencia << std::endl;
 }
 
-void Cita::cancelarCita() {
+bool Cita::cancelarCita() {
     if (fecha.empty() && hora.empty()) {
         std::cout << "La cita ya está cancelada." << std::endl;
         return false;
@@ -33,7 +33,7 @@ void Cita::modificarCita() {
 
 void Cita::ordenarCitasPorFecha(std::vector<Cita*>& citas) {
     std::sort(citas.begin(), citas.end(), [](Cita* a, Cita* b) {
-        return a->fecha < b->fecha; // Compara las fechas
+        return a->fecha < b->fecha; 
         });
 
     std::cout << "Citas ordenadas por fecha." << std::endl;

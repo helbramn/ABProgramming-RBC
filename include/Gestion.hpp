@@ -23,6 +23,7 @@ public:
     void generarReporte(const std::string& tipo); 
     void guardarEnArchivo(); 
     void cargarDesdeArchivo(); 
+    const std::vector<Paciente*>& getPacientes() const;
 };
 
 #endif

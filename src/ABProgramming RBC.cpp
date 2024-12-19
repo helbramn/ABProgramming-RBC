@@ -17,23 +17,25 @@ void mostrarMenu() {
     cout << "2. Registrar Medico" << endl;
     cout << "3. Agendar Cita" << endl;
     cout << "4. Consultar Historial Clinico" << endl;
-    cout << "5. Generar Reporte de Pacientes por Fecha\n";
-    cout << "6. Generar Reporte de Citas por Especialidad\n";
-    cout << "7. Ordenar Citas por Fecha\n";
-    cout << "8. Guardar Datos\n";
-    cout << "9. Cargar Datos\n";
+    cout << "5. Generar Reporte" << endl;
     cout << "5. Salir" << endl;
     cout << "Seleccione una opcion: ";
 }
 
 int main() {
     Gestion gestion;
-    int opcion;
+    int opcion = 0;
+
+    try {
+        gestion.cargarDesdeArchivo();
+    }
+    catch (const exception& e) {
+        cout << "Error al cargar los datos: " << e.what() << endl;
+    }
 
     do {
         mostrarMenu();
         cin >> opcion;
-        cin.ignore(); // Limpiar buffer
 
         switch (opcion) {
         case 1: {
@@ -49,47 +51,39 @@ int main() {
             break;
         }
         case 4: {
-            gestion.consultarHistorial();
+            string tipoReporte;
+            cout << "Tipos de reporte disponibles: pacientes, citas." << endl;
+            cout << "Ingrese el tipo de reporte: ";
+            cin >> tipoReporte;
+            gestion.generarReporte(tipoReporte);
             break;
         }
         case 5: {
-            string fechaInicio, fechaFin;
-            cout << "Ingrese la fecha de inicio (YYYY-MM-DD): ";
-            cin >> fechaInicio;
-            cout << "Ingrese la fecha de fin (YYYY-MM-DD): ";
-            cin >> fechaFin;
-            gestion.reportePacientesPorFecha(fechaInicio, fechaFin);
+            string idPaciente;
+            cout << "Ingrese el ID del paciente: ";
+            cin >> idPaciente;
+            bool encontrado = false;
+            for (const auto& p : gestion.getPacientes()) {
+                if (p->getID() == idPaciente) {
+                    p->consultarHistorial();
+                    encontrado = true;
+                    break;
+                }
+            }
+            if (!encontrado) {
+                cout << "Paciente no encontrado." << endl;
+            }
             break;
         }
-        case 6: {
-            string especialidad;
-            cout << "Ingrese la especialidad: ";
-            cin >> especialidad;
-            gestion.reporteCitasPorEspecialidad(especialidad);
+        case 6:
+            gestion.guardarEnArchivo();
+            cout << "Datos guardados. Saliendo del sistema..." << endl;
             break;
+        default:
+            cout << "Opción no válida. Intente de nuevo." << endl;
         }
-        case 7: {
-            gestion.ordenarCitasPorFecha();
-            break;
-        }
-        case 8: {
-            gestion.guardarDatos();
-            break;
-        }
-        case 9: {
-            gestion.cargarDatos();
-            break;
-        }
-        case 0: {
-            cout << "Saliendo del sistema.\n";
-            break;
-        }
-        default: {
-            cout << "Opcion invalida. Intente de nuevo.\n";
-            break;
-        }
-        }
-    } while (opcion != 0);
+
+    } while (opcion != 6);
 
     return 0;
 }

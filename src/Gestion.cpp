@@ -10,6 +10,9 @@ Gestion::~Gestion() {
     for (auto m : medicos) delete m;
     for (auto c : citas) delete c;
 }
+const std::vector<Paciente*>& Gestion::getPacientes() const {
+    return pacientes;
+}
 void Gestion::registrarPaciente() {
     std::string nombre, dni, fechaIngreso;
     std::cout << "Ingrese el nombre del paciente: ";
@@ -71,7 +74,7 @@ void Gestion::cargarDesdeArchivo() {
 
     std::string linea;
     while (std::getline(archivo, linea)) {
-        std::cout << linea << std::endl; // Imprime las líneas cargadas
+        std::cout << linea << std::endl; 
     }
 
     archivo.close();
