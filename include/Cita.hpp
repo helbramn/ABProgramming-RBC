@@ -11,10 +11,13 @@ private:
     std::string hora;
     Paciente* paciente;
     Medico* medico;
+    int urgencia;
 
 public:
-    Cita(const std::string& fecha, const std::string& hora, Paciente* paciente, Medico* medico);
+    Cita(const std::string& fecha, const std::string& hora, int urgencia, Paciente* paciente, Medico* medico);
     void mostrarCita() const;
+    void cancelarCita();
+    void modificarCita();
 };
 
 #endif

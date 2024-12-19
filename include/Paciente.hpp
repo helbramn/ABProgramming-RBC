@@ -7,13 +7,20 @@
 class Paciente {
 private:
     std::string nombre;
+    std::string dni;
     std::string id;
     std::string fechaIngreso;
     HistorialClinico historial;
 
 public:
-    Paciente(const std::string& nombre, const std::string& id, const std::string& fechaIngreso);
+    Paciente(const std::string& nombre, const std::string& dni, const std::string& fechaIngreso);
     const std::string& getID() const;
+    const std::string& getDNI() const;
+    void modificarDatos();
+    bool validarDNI(const std::string& dni);  
+    bool buscarPaciente(const std::string& criterio);
+
+
     void registrarDiagnostico(const std::string& diagnostico);
     void consultarHistorial() const;
 };

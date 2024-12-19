@@ -16,6 +16,7 @@ public:
     const std::string& getNombre() const;
     bool isDisponible() const;
     void setDisponibilidad(bool estado);
+    void listarPorEspecialidad(const std::string& especialidad);
 };
 
 #endif

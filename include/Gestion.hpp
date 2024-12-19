@@ -15,10 +15,11 @@ private:
 public:
     Gestion();
     ~Gestion();
-    void registrarPaciente();
-    void registrarMedico();
-    void agendarCita();
-    void consultarHistorial();
+    void guardarDatos();
+    void cargarDatos();
+    void reportePacientesPorFecha(const std::string& fechaInicio, const std::string& fechaFin);
+    void reporteCitasPorEspecialidad(const std::string& especialidad);
+    void ordenarCitasPorFecha();
 };
 
 #endif

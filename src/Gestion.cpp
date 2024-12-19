@@ -1,6 +1,8 @@
 #include "Gestion.hpp"
 #include <iostream>
-
+#include <fstream>
+#include <algorithm> 
+#include <sstream>   
 Gestion::Gestion() {}
 
 Gestion::~Gestion() {
@@ -8,80 +10,66 @@ Gestion::~Gestion() {
     for (auto m : medicos) delete m;
     for (auto c : citas) delete c;
 }
-
-void Gestion::registrarPaciente() {
-    std::string nombre, dni, fechaIngreso;
-    std::cout << "Ingrese el nombre del paciente: ";
-    std::cin >> nombre;
-    std::cout << "Ingrese el DNI del paciente: ";
-    std::cin >> dni;
-    std::cout << "Ingrese la fecha de ingreso: ";
-    std::cin >> fechaIngreso;
-
-    pacientes.push_back(new Paciente(nombre, dni, fechaIngreso));
-    std::cout << "Paciente registrado con éxito." << std::endl;
-}
-
-void Gestion::registrarMedico() {
-    std::string nombre, especialidad;
-    std::cout << "Ingrese el nombre del medico: ";
-    std::cin >> nombre;
-    std::cout << "Ingrese la especialidad del medico: ";
-    std::cin >> especialidad;
-
-    medicos.push_back(new Medico(nombre, especialidad));
-    std::cout << "Medico registrado con éxito." << std::endl;
-}
-
-void Gestion::agendarCita() {
-    std::string fecha, hora, dniPaciente, nombreMedico;
-    std::cout << "Ingrese la fecha de la cita (YYYY-MM-DD): ";
-    std::cin >> fecha;
-    std::cout << "Ingrese la hora de la cita (HH:MM): ";
-    std::cin >> hora;
-    std::cout << "Ingrese el DNI del paciente: ";
-    std::cin >> dniPaciente;
-    std::cout << "Ingrese el nombre del medico: ";
-    std::cin >> nombreMedico;
-
-    Paciente* paciente = nullptr;
-    Medico* medico = nullptr;
-
+void Gestion::guardarDatos() {
+    std::ofstream archivoPacientes("pacientes.txt");
     for (auto p : pacientes) {
-        if (p->getID() == dniPaciente) {
-            paciente = p;
-            break;
-        }
+        archivoPacientes << p->getID() << "," << p->getDNI() << "," << p->getNombre() << "\n";
     }
+    archivoPacientes.close();
 
+    std::ofstream archivoMedicos("medicos.txt");
     for (auto m : medicos) {
-        if (m->getNombre() == nombreMedico && m->isDisponible()) {
-            medico = m;
-            medico->setDisponibilidad(false);
-            break;
-        }
+        archivoMedicos << m->getNombre() << "," << m->getEspecialidad() << "\n";
     }
+}
+void Gestion::cargarDatos() {
+    std::ifstream archivoPacientes("pacientes.txt");
+    std::string linea;
+    while (getline(archivoPacientes, linea)) {
+        std::istringstream stream(linea);
+        std::string nombre, dni, fechaIngreso;
+        getline(stream, nombre, ','); 
+        getline(stream, fechaIngreso, ',');
+        pacientes.push_back(new Paciente(nombre, dni, fechaIngreso));
+    }
+    archivoPacientes.close();
 
-    if (paciente && medico) {
-        citas.push_back(new Cita(fecha, hora, paciente, medico));
-        std::cout << "Cita agendada con exito." << std::endl;
+    std::ifstream archivoMedicos("medicos.txt");
+    while (getline(archivoMedicos, linea)) {
+        std::istringstream stream(linea);
+        std::string nombre, especialidad;
+        getline(stream, nombre, ',');
+        getline(stream, especialidad, ',');
+        medicos.push_back(new Medico(nombre, especialidad));
     }
-    else {
-        std::cout << "Error al agendar la cita: paciente o medico no encontrado/disponible." << std::endl;
+    archivoMedicos.close();
+}
+
+void Gestion::reportePacientesPorFecha(const std::string& fechaInicio, const std::string& fechaFin) {
+    std::cout << "Pacientes atendidos entre " << fechaInicio << " y " << fechaFin << ":\n";
+    for (auto p : pacientes) {
+        if (p->getFechaIngreso() >= fechaInicio && p->getFechaIngreso() <= fechaFin) {
+            std::cout << p->getNombre() << "\n";
+        }
     }
 }
 
-void Gestion::consultarHistorial() {
-    std::string dni;
-    std::cout << "Ingrese el DNI del paciente: ";
-    std::cin >> dni;
-
-    for (auto p : pacientes) {
-        if (p->getID() == dni) {
-            p->consultarHistorial();
-            return;
+void Gestion::reporteCitasPorEspecialidad(const std::string& especialidad) {
+    std::cout << "Citas pendientes para la especialidad: " << especialidad << "\n";
+    for (auto c : citas) {
+        if (c->getMedico()->getNombre() == especialidad) {
+            c->mostrarCita();
         }
     }
+}
 
-    std::cout << "Paciente no encontrado." << std::endl;
+// Ordenación
+void Gestion::ordenarCitasPorFecha() {
+    std::sort(citas.begin(), citas.end(), [](Cita* a, Cita* b) {
+        return a->getFecha() < b->getFecha();
+        });
+    // Error: Olvidé verificar si el vector de citas está vacío.
+    for (auto c : citas) {
+        c->mostrarCita();
+    }
 }
