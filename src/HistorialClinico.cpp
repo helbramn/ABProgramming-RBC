@@ -6,7 +6,7 @@ void HistorialClinico::agregarDiagnostico(const std::string& diagnostico) {
 }
 
 void HistorialClinico::consultarHistorial() const {
-    std::cout << "Diagnósticos registrados:" << std::endl;
+    std::cout << "Diagnosticos registrados:" << std::endl;
     for (const auto& diag : diagnosticos) {
         std::cout << "- " << diag << std::endl;
     }

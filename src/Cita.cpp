@@ -7,6 +7,6 @@ Cita::Cita(const std::string& fecha, const std::string& hora, Paciente* paciente
 void Cita::mostrarCita() const {
     std::cout << "Cita programada:" << std::endl;
     std::cout << "Fecha: " << fecha << ", Hora: " << hora << std::endl;
-    std::cout << "Paciente: " << paciente->getDNI() << std::endl;
-    std::cout << "Médico: " << medico->getNombre() << " (" << medico->getEspecialidad() << ")" << std::endl;
+    std::cout << "Paciente: " << paciente->getID() << std::endl;
+    std::cout << "Medico: " << medico->getNombre() << " (" << medico->getEspecialidad() << ")" << std::endl;
 }

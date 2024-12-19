@@ -24,13 +24,13 @@ void Gestion::registrarPaciente() {
 
 void Gestion::registrarMedico() {
     std::string nombre, especialidad;
-    std::cout << "Ingrese el nombre del médico: ";
+    std::cout << "Ingrese el nombre del medico: ";
     std::cin >> nombre;
-    std::cout << "Ingrese la especialidad del médico: ";
+    std::cout << "Ingrese la especialidad del medico: ";
     std::cin >> especialidad;
 
     medicos.push_back(new Medico(nombre, especialidad));
-    std::cout << "Médico registrado con éxito." << std::endl;
+    std::cout << "Medico registrado con éxito." << std::endl;
 }
 
 void Gestion::agendarCita() {
@@ -41,14 +41,14 @@ void Gestion::agendarCita() {
     std::cin >> hora;
     std::cout << "Ingrese el DNI del paciente: ";
     std::cin >> dniPaciente;
-    std::cout << "Ingrese el nombre del médico: ";
+    std::cout << "Ingrese el nombre del medico: ";
     std::cin >> nombreMedico;
 
     Paciente* paciente = nullptr;
     Medico* medico = nullptr;
 
     for (auto p : pacientes) {
-        if (p->getDNI() == dniPaciente) {
+        if (p->getID() == dniPaciente) {
             paciente = p;
             break;
         }
@@ -64,10 +64,10 @@ void Gestion::agendarCita() {
 
     if (paciente && medico) {
         citas.push_back(new Cita(fecha, hora, paciente, medico));
-        std::cout << "Cita agendada con éxito." << std::endl;
+        std::cout << "Cita agendada con exito." << std::endl;
     }
     else {
-        std::cout << "Error al agendar la cita: paciente o médico no encontrado/disponible." << std::endl;
+        std::cout << "Error al agendar la cita: paciente o medico no encontrado/disponible." << std::endl;
     }
 }
 
@@ -77,7 +77,7 @@ void Gestion::consultarHistorial() {
     std::cin >> dni;
 
     for (auto p : pacientes) {
-        if (p->getDNI() == dni) {
+        if (p->getID() == dni) {
             p->consultarHistorial();
             return;
         }

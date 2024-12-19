@@ -14,9 +14,9 @@ void mostrarMenu() {
     cout << "   Sistema de Gestión Hospitalaria" << endl;
     cout << "==============================" << endl;
     cout << "1. Registrar Paciente" << endl;
-    cout << "2. Registrar Médico" << endl;
+    cout << "2. Registrar Medico" << endl;
     cout << "3. Agendar Cita" << endl;
-    cout << "4. Consultar Historial Clínico" << endl;
+    cout << "4. Consultar Historial Clinico" << endl;
     cout << "5. Salir" << endl;
     cout << "Seleccione una opción: ";
 }
@@ -46,7 +46,7 @@ int main() {
             cout << "Saliendo del sistema..." << endl;
             break;
         default:
-            cout << "Opción no válida. Intente de nuevo." << endl;
+            cout << "Opción no valida. Intente de nuevo." << endl;
         }
 
     } while (opcion != 5);
