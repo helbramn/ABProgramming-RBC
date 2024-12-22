@@ -2,23 +2,21 @@
 #include <iostream>
 #include <algorithm>
 
-Cita::Cita(const std::string& fecha, const std::string& hora, int urgencia, Paciente* paciente, Medico* medico)
-    : fecha(fecha), hora(hora), urgencia(urgencia), paciente(paciente), medico(medico) {}
+Cita::Cita(const std::string& fecha, Paciente* paciente, Medico* medico)
+    : fecha(fecha), paciente(paciente), medico(medico) {}
 
 void Cita::mostrarCita() const {
-    std::cout << "Fecha: " << fecha << ", Hora: " << hora << std::endl;
+    std::cout << "Fecha: " << fecha << std::endl;
     std::cout << "Paciente: " << paciente->getID() << std::endl;
     std::cout << "Medico: " << medico->getNombre() << " (" << medico->getEspecialidad() << ")" << std::endl;
-    std::cout << "Urgencia: " << urgencia << std::endl;
 }
 
 bool Cita::cancelarCita() {
-    if (fecha.empty() && hora.empty()) {
+    if (fecha.empty()) {
         std::cout << "La cita ya está cancelada." << std::endl;
         return false;
     }
     fecha.clear(); 
-    hora.clear();
     std::cout << "Cita cancelada con éxito." << std::endl;
     return true;
 }
@@ -26,8 +24,6 @@ bool Cita::cancelarCita() {
 void Cita::modificarCita() {
     std::cout << "Ingrese la nueva fecha (DD-MM-YYYY): ";
     std::cin >> fecha;
-    std::cout << "Ingrese la nueva hora (HH:MM): ";
-    std::cin >> hora;
     std::cout << "Cita modificada con éxito." << std::endl;
 }
 

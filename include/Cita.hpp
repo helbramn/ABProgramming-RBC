@@ -8,13 +8,11 @@
 class Cita {
 private:
     std::string fecha;
-    std::string hora;
     Paciente* paciente;
     Medico* medico;
-    int urgencia;
 
 public:
-    Cita(const std::string& fecha, const std::string& hora, int urgencia, Paciente* paciente, Medico* medico);
+    Cita(const std::string& fecha, Paciente* paciente, Medico* medico);
     void mostrarCita() const;
     bool cancelarCita();
     void modificarCita();

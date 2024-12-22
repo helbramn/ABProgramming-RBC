@@ -1,8 +1,8 @@
 #include "Medico.hpp"
 #include <iostream>
 
-Medico::Medico(const std::string& nombre, const std::string& especialidad)
-    : nombre(nombre), especialidad(especialidad), disponible(true) {}
+Medico::Medico(const std::string& nombre, const std::string& especialidad, bool disponible)
+    : nombre(nombre), especialidad(especialidad), disponible(disponible) {}
 
 const std::string& Medico::getNombre() const {
     return nombre; 

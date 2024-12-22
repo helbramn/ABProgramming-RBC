@@ -81,9 +81,56 @@ void Gestion::cargarDesdeArchivo() {
     std::cout << "Datos cargados desde datos.csv" << std::endl;
 }
 void Gestion::registrarMedico() {
-    std::cout << "Función registrarMedico no implementada aún." << std::endl;
+    std::string nombre, especialidad;
+    bool disponible;
+
+    std::cout << "Ingrese el nombre del médico: ";
+    std::cin.ignore();
+    std::getline(std::cin, nombre);
+
+    std::cout << "Ingrese la especialidad del médico: ";
+    std::getline(std::cin, especialidad);
+
+    std::cout << "¿Está disponible el médico? (1 para Sí, 0 para No): ";
+    std::cin >> disponible;
+
+    Medico* nuevoMedico = new Medico(nombre, especialidad, disponible);
+    medicos.push_back(nuevoMedico);
+    std::cout << "Médico registrado con éxito." << std::endl;
 }
 
 void Gestion::agendarCita() {
-    std::cout << "Función agendarCita no implementada aún." << std::endl;
+    std::string dniPaciente, nombreMedico, fecha;
+
+    std::cout << "Ingrese el DNI del paciente: ";
+    std::cin >> dniPaciente;
+    std::cout << "Ingrese el nombre del médico: ";
+    std::cin.ignore();
+    std::getline(std::cin, nombreMedico);
+    std::cout << "Ingrese la fecha de la cita (YYYY-MM-DD): ";
+    std::cin >> fecha;
+
+
+    auto itPaciente = std::find_if(pacientes.begin(), pacientes.end(), [&](Paciente* p) {
+        return p->getID() == dniPaciente;
+        });
+
+    if (itPaciente == pacientes.end()) {
+        std::cout << "Paciente no encontrado." << std::endl;
+        return;
+    }
+
+    auto itMedico = std::find_if(medicos.begin(), medicos.end(), [&](Medico* m) {
+        return m->getNombre() == nombreMedico;
+        });
+
+    if (itMedico == medicos.end()) {
+        std::cout << "Médico no encontrado." << std::endl;
+        return;
+    }
+
+    Cita* nuevaCita = new Cita(fecha, *itPaciente, *itMedico);
+    citas.push_back(nuevaCita);
+    std::cout << "Cita agendada con éxito." << std::endl;
 }
+

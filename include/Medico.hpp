@@ -12,7 +12,7 @@ private:
     bool disponible;
 
 public:
-    Medico(const std::string& nombre, const std::string& especialidad);
+    Medico(const std::string& nombre, const std::string& especialidad, bool disponible);
     const std::string& getEspecialidad() const;
     const std::string& getNombre() const;
     bool isDisponible() const;
