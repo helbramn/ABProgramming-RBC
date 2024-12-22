@@ -80,6 +80,10 @@ void Gestion::cargarDesdeArchivo() {
     archivo.close();
     std::cout << "Datos cargados desde datos.csv" << std::endl;
 }
+
+
+
+
 void Gestion::registrarMedico() {
     std::cout << "Función registrarMedico no implementada aún." << std::endl;
 }
