@@ -13,10 +13,15 @@ private:
 
 public:
     Cita(const std::string& fecha, Paciente* paciente, Medico* medico);
+    std::string getFecha() const;
+    Paciente* getPaciente() const;
+    Medico* getMedico() const;
     void mostrarCita() const;
     bool cancelarCita();
     void modificarCita();
     static void ordenarCitasPorFecha(std::vector<Cita*>& citas);
+
+
 };
 
 #endif

@@ -34,3 +34,15 @@ void Cita::ordenarCitasPorFecha(std::vector<Cita*>& citas) {
 
     std::cout << "Citas ordenadas por fecha." << std::endl;
 }
+
+std::string Cita::getFecha() const {
+    return fecha;
+}
+
+Paciente* Cita::getPaciente() const {
+    return paciente;
+}
+
+Medico* Cita::getMedico() const {
+    return medico;
+}

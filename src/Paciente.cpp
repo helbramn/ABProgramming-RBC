@@ -34,8 +34,13 @@ void Paciente::modificarDatos() {
 }
 
 bool Paciente::validarDNI(const std::string& dni) {
-    std::regex formatoDNI("[0-9]{8}[A-Za-z]"); 
-    return std::regex_match(dni, formatoDNI);
+    std::regex dniRegex("^[0-9]{8}[A-Za-z]$"); 
+    bool esValido = std::regex_match(dni, dniRegex);
+
+    if (!esValido) {
+        std::cout << "DNI inválido. Asegúrese de ingresar 8 dígitos seguidos de una letra." << std::endl;
+    }
+    return esValido;
 }
 
 bool Paciente::buscarPaciente(const std::string& criterio) {

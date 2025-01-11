@@ -12,6 +12,14 @@ private:
     std::vector<Paciente*> pacientes;
     std::vector<Medico*> medicos;
     std::vector<Cita*> citas;
+    std::vector<Paciente> listaPacientes;
+
+    void guardarPacientes();
+    void cargarPacientes();
+    void guardarMedicos();
+    void cargarMedicos();
+    void guardarCitas();
+    void cargarCitas();
 
 public:
     Gestion();
@@ -19,7 +27,7 @@ public:
     void registrarPaciente();
     void registrarMedico();
     void agendarCita();
-    void consultarHistorial(int idPaciente);
+    void consultarHistorial(const std::string& idPaciente);
     void generarReporte(const std::string& tipo); 
     void guardarEnArchivo(); 
     void cargarDesdeArchivo(); 

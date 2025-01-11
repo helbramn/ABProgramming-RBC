@@ -79,12 +79,10 @@ int main() {
             break;
         }
         case 4: {
-            int idPaciente;
-            cout << "Ingrese el ID del paciente: ";
-            cin >> idPaciente;
-
-            gestion.consultarHistorial(idPaciente); 
-            break;
+            std::string idPaciente;
+            std::cout << "Ingrese el ID del paciente: ";
+            std::cin >> idPaciente;
+            gestion.consultarHistorial(idPaciente);
         }
         case 5: {
             string tipoReporte;
