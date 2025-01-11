@@ -4,11 +4,11 @@
 
 void HistorialClinico::agregarDiagnostico(const std::string& diagnostico) {
     diagnosticos.push_back(diagnostico);
-    std::cout << "Diagnóstico agregado: " << diagnostico << std::endl;
+    std::cout << "Diagnostico agregado: " << diagnostico << std::endl;
 }
 void HistorialClinico::agregarTratamiento(const std::string& tratamiento) {
     if (tratamiento.empty()) {
-        std::cout << "Error: El tratamiento no puede estar vacío." << std::endl;
+        std::cout << "Error: El tratamiento no puede estar vacio." << std::endl;
         return;
     }
     tratamientos.push_back(tratamiento);
@@ -17,7 +17,7 @@ void HistorialClinico::agregarTratamiento(const std::string& tratamiento) {
 }
 void HistorialClinico::agregarReceta(const std::string& receta) {
     if (receta.empty()) {
-        std::cout << "Error: La receta no puede estar vacía." << std::endl;
+        std::cout << "Error: La receta no puede estar vacia." << std::endl;
         return;
     }
     recetas.push_back(receta);
@@ -25,15 +25,15 @@ void HistorialClinico::agregarReceta(const std::string& receta) {
 }
 void HistorialClinico::agregarCirugia(const std::string& cirugia) {
     if (cirugia.empty()) {
-        std::cout << "Error: La cirugía no puede estar vacía." << std::endl;
+        std::cout << "Error: La cirugia no puede estar vacia." << std::endl;
         return;
     }
     cirugias.push_back(cirugia);
-    std::cout << "Cirugía agregada: " << cirugia << std::endl;
+    std::cout << "Cirugia agregada: " << cirugia << std::endl;
 }
 void HistorialClinico::consultarHistorial() const {
    std::cout << "=== Historial Clínico ===" << std::endl;
-   std::cout << "Diagnósticos:" << std::endl;
+   std::cout << "Diagnosticos:" << std::endl;
     for (const auto& diag : diagnosticos) {
         std::cout << "- " << diag << std::endl;
     }
@@ -45,7 +45,7 @@ void HistorialClinico::consultarHistorial() const {
     for (const auto& rec : recetas) {
         std::cout << "- " << rec << std::endl;
     }
-   std::cout << "Cirugías:" << std::endl;
+   std::cout << "Cirugias:" << std::endl;
     for (const auto& cir : cirugias) {
         std::cout << "- " << cir << std::endl;
     }

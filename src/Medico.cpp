@@ -21,7 +21,7 @@ void Medico::setDisponibilidad(bool estado) {
 }
 
 void Medico::listarPorEspecialidad(const std::vector<Medico*>& medicos, const std::string& especialidad) {
-    std::cout << "Médicos con especialidad: " << especialidad << std::endl;
+    std::cout << "Medicos con especialidad: " << especialidad << std::endl;
     for (const auto& medico : medicos) {
         if (medico->getEspecialidad() == especialidad) {
             std::cout << "- " << medico->getNombre()

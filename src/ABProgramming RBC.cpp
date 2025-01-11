@@ -1,6 +1,7 @@
 ﻿// ABProgramming RBC.cpp: define el punto de entrada de la aplicación.
 
 #include <iostream>
+#include <fstream>
 #include "Paciente.hpp"
 #include "Medico.hpp"
 #include "Cita.hpp"
@@ -18,12 +19,35 @@ void mostrarMenu() {
     cout << "3. Agendar Cita" << endl;
     cout << "4. Consultar Historial Clinico" << endl;
     cout << "5. Generar Reporte" << endl;
-    cout << "5. Salir" << endl;
+    cout << "6. Salir" << endl;
     cout << "Seleccione una opcion: ";
+}
+
+void inicializarSistema() {
+    std::ofstream archivo;
+    archivo.open("Pacientes.csv", std::ios::app);
+    archivo.close();
+
+    archivo.open("Medicos.csv", std::ios::app);
+    archivo.close();
+
+    archivo.open("Citas.csv", std::ios::app);
+    archivo.close();
+
+    archivo.open("HistorialClinico.csv", std::ios::app);
+    archivo.close();
 }
 
 int main() {
     Gestion gestion;
+    try {
+        inicializarSistema(); 
+        gestion.cargarDesdeArchivo();
+    }
+    catch (const exception& e) {
+        cout << "Error al cargar los datos: " << e.what() << endl;
+    }
+
     int opcion = 0;
 
     try {
@@ -35,7 +59,11 @@ int main() {
 
     do {
         mostrarMenu();
-        cin >> opcion;
+        while (!(cin >> opcion)) {
+            cin.clear(); 
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); 
+            cout << "Entrada invalida. Por favor, ingrese un numero: ";
+        }
 
         switch (opcion) {
         case 1: {
@@ -51,36 +79,29 @@ int main() {
             break;
         }
         case 4: {
+            int idPaciente;
+            cout << "Ingrese el ID del paciente: ";
+            cin >> idPaciente;
+
+            gestion.consultarHistorial(idPaciente); 
+            break;
+        }
+        case 5: {
             string tipoReporte;
             cout << "Tipos de reporte disponibles: pacientes, citas." << endl;
             cout << "Ingrese el tipo de reporte: ";
             cin >> tipoReporte;
-            gestion.generarReporte(tipoReporte);
+
+            gestion.generarReporte(tipoReporte); 
             break;
         }
-        case 5: {
-            string idPaciente;
-            cout << "Ingrese el ID del paciente: ";
-            cin >> idPaciente;
-            bool encontrado = false;
-            for (const auto& p : gestion.getPacientes()) {
-                if (p->getID() == idPaciente) {
-                    p->consultarHistorial();
-                    encontrado = true;
-                    break;
-                }
-            }
-            if (!encontrado) {
-                cout << "Paciente no encontrado." << endl;
-            }
-            break;
-        }
+
         case 6:
             gestion.guardarEnArchivo();
             cout << "Datos guardados. Saliendo del sistema..." << endl;
             break;
         default:
-            cout << "Opción no válida. Intente de nuevo." << endl;
+            cout << "Opción no valida. Intente de nuevo." << endl;
         }
 
     } while (opcion != 6);

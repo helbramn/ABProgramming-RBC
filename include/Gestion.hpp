@@ -19,7 +19,7 @@ public:
     void registrarPaciente();
     void registrarMedico();
     void agendarCita();
-    void consultarHistorial();
+    void consultarHistorial(int idPaciente);
     void generarReporte(const std::string& tipo); 
     void guardarEnArchivo(); 
     void cargarDesdeArchivo(); 

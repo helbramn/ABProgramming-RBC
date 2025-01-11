@@ -24,7 +24,7 @@ void Gestion::registrarPaciente() {
     std::cin >> fechaIngreso;
 
     pacientes.push_back(new Paciente(nombre, dni, fechaIngreso));
-    std::cout << "Paciente registrado con éxito." << std::endl;
+    std::cout << "Paciente registrado con exito." << std::endl;
 }
 void Gestion::generarReporte(const std::string& tipo) {
     if (tipo == "pacientes") {
@@ -66,7 +66,7 @@ void Gestion::guardarEnArchivo() {
 }
 
 void Gestion::cargarDesdeArchivo() {
-    std::ifstream archivo("datos.csv");
+    std::ifstream archivo("\repos\ABProgramming RBC\datos.csv");
     if (!archivo.is_open()) {
         std::cout << "Error al abrir el archivo para cargar." << std::endl;
         return;
@@ -84,19 +84,19 @@ void Gestion::registrarMedico() {
     std::string nombre, especialidad;
     bool disponible;
 
-    std::cout << "Ingrese el nombre del médico: ";
+    std::cout << "Ingrese el nombre del medico: ";
     std::cin.ignore();
     std::getline(std::cin, nombre);
 
-    std::cout << "Ingrese la especialidad del médico: ";
+    std::cout << "Ingrese la especialidad del medico: ";
     std::getline(std::cin, especialidad);
 
-    std::cout << "¿Está disponible el médico? (1 para Sí, 0 para No): ";
+    std::cout << "¿Esta disponible el medico? (1 para Si, 0 para No): ";
     std::cin >> disponible;
 
     Medico* nuevoMedico = new Medico(nombre, especialidad, disponible);
     medicos.push_back(nuevoMedico);
-    std::cout << "Médico registrado con éxito." << std::endl;
+    std::cout << "Medico registrado con exito." << std::endl;
 }
 
 void Gestion::agendarCita() {
@@ -104,7 +104,7 @@ void Gestion::agendarCita() {
 
     std::cout << "Ingrese el DNI del paciente: ";
     std::cin >> dniPaciente;
-    std::cout << "Ingrese el nombre del médico: ";
+    std::cout << "Ingrese el nombre del medico: ";
     std::cin.ignore();
     std::getline(std::cin, nombreMedico);
     std::cout << "Ingrese la fecha de la cita (YYYY-MM-DD): ";
@@ -125,12 +125,29 @@ void Gestion::agendarCita() {
         });
 
     if (itMedico == medicos.end()) {
-        std::cout << "Médico no encontrado." << std::endl;
+        std::cout << "Medico no encontrado." << std::endl;
         return;
     }
 
     Cita* nuevaCita = new Cita(fecha, *itPaciente, *itMedico);
     citas.push_back(nuevaCita);
-    std::cout << "Cita agendada con éxito." << std::endl;
+    std::cout << "Cita agendada con exito." << std::endl;
 }
+
+void Gestion::consultarHistorial(int idPaciente) {
+    bool encontrado = false;
+
+    for (const auto& paciente : pacientes) {
+        if (paciente->getID() == std::to_string(idPaciente)) {
+            paciente->consultarHistorial(); 
+            encontrado = true;
+            break;
+        }
+    }
+
+    if (!encontrado) {
+        std::cout << "Paciente no encontrado con el ID proporcionado." << std::endl;
+    }
+}
+
 

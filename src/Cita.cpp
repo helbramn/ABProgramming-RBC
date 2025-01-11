@@ -13,18 +13,18 @@ void Cita::mostrarCita() const {
 
 bool Cita::cancelarCita() {
     if (fecha.empty()) {
-        std::cout << "La cita ya está cancelada." << std::endl;
+        std::cout << "La cita ya esta cancelada." << std::endl;
         return false;
     }
     fecha.clear(); 
-    std::cout << "Cita cancelada con éxito." << std::endl;
+    std::cout << "Cita cancelada con exito." << std::endl;
     return true;
 }
 
 void Cita::modificarCita() {
     std::cout << "Ingrese la nueva fecha (DD-MM-YYYY): ";
     std::cin >> fecha;
-    std::cout << "Cita modificada con éxito." << std::endl;
+    std::cout << "Cita modificada con exito." << std::endl;
 }
 
 void Cita::ordenarCitasPorFecha(std::vector<Cita*>& citas) {

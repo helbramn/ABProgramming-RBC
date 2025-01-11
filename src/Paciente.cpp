@@ -4,7 +4,7 @@
 Paciente::Paciente(const std::string& nombre, const std::string& dni, const std::string& fechaIngreso)
     : nombre(nombre), dni(dni), fechaIngreso(fechaIngreso) {
     if (!validarDNI(dni)) {
-        throw std::invalid_argument("Formato de DNI inválido.");
+        throw std::invalid_argument("Formato de DNI invalido.");
     }
     id = "PAC_" + dni;
 }
