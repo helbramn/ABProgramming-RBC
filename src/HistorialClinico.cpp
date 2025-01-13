@@ -1,6 +1,7 @@
 #include "HistorialClinico.hpp"
 #include <iostream>
 #include <algorithm>
+#include <sstream>
 
 void HistorialClinico::agregarDiagnostico(const std::string& diagnostico) {
     diagnosticos.push_back(diagnostico);
@@ -51,12 +52,81 @@ void HistorialClinico::consultarHistorial() const {
     }
 }
 
-void HistorialClinico::buscarPorTipo(const std::string& tipo) const {
-    std::cout << "Resultados para: " << tipo << std::endl;
-    const auto& lista = (tipo == "diagnostico") ? diagnosticos :
-        (tipo == "tratamiento") ? tratamientos :
-        (tipo == "receta") ? recetas : cirugias;
-    for (const auto& item : lista) {
-        std::cout << "- " << item << std::endl;
+std::string HistorialClinico::vectorToCSV(const std::vector<std::string>& vec) const {
+    std::ostringstream oss;
+    for (size_t i = 0; i < vec.size(); ++i) {
+        oss << vec[i];
+        if (i < vec.size() - 1) {
+            oss << ";";
+        }
     }
+    return oss.str();
 }
+
+std::vector<std::string> HistorialClinico::csvToVector(const std::string& csv) const {
+    std::vector<std::string> result;
+    std::istringstream iss(csv);
+    std::string token;
+
+    while (std::getline(iss, token, ';')) {
+        result.push_back(token);
+    }
+    return result;
+}
+
+std::string HistorialClinico::serializar() const {
+    return vectorToCSV(diagnosticos) + "|" + vectorToCSV(tratamientos) + "|" +
+        vectorToCSV(recetas) + "|" + vectorToCSV(cirugias);
+}
+
+void HistorialClinico::deserializar(const std::string& data) {
+    std::istringstream iss(data);
+    std::string diag, trat, rec, cir;
+
+    std::getline(iss, diag, '|');
+    std::getline(iss, trat, '|');
+    std::getline(iss, rec, '|');
+    std::getline(iss, cir, '|');
+
+    diagnosticos = csvToVector(diag);
+    tratamientos = csvToVector(trat);
+    recetas = csvToVector(rec);
+    cirugias = csvToVector(cir);
+}
+
+std::string HistorialClinico::getDiagnosticosCSV() const {
+    std::string csv;
+    for (const auto& diagnostico : diagnosticos) {
+        if (!csv.empty()) csv += ";"; // Separador entre diagnósticos
+        csv += diagnostico;
+    }
+    return csv;
+}
+
+std::string HistorialClinico::getTratamientosCSV() const {
+    std::string csv;
+    for (const auto& tratamiento : tratamientos) {
+        if (!csv.empty()) csv += ";";
+        csv += tratamiento;
+    }
+    return csv;
+}
+
+std::string HistorialClinico::getRecetasCSV() const {
+    std::string csv;
+    for (const auto& receta : recetas) {
+        if (!csv.empty()) csv += ";";
+        csv += receta;
+    }
+    return csv;
+}
+
+std::string HistorialClinico::getCirugiasCSV() const {
+    std::string csv;
+    for (const auto& cirugia : cirugias) {
+        if (!csv.empty()) csv += ";";
+        csv += cirugia;
+    }
+    return csv;
+}
+

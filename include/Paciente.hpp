@@ -18,6 +18,8 @@ public:
     const std::string& getDNI() const;
     const std::string& getNombre() const;
     const std::string& getFechaIngreso() const;
+    const HistorialClinico& getHistorial() const;
+    HistorialClinico& getHistorial();
     void modificarDatos();
     bool validarDNI(const std::string& dni);  
     bool buscarPaciente(const std::string& criterio);

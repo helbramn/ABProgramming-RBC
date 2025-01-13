@@ -60,3 +60,11 @@ void Paciente::consultarHistorial() const {
     std::cout << "Historial del paciente: " << nombre << " (ID: " << id << ", DNI: " << dni << ")" << std::endl;
     historial.consultarHistorial();
 }
+
+const HistorialClinico& Paciente::getHistorial() const {
+    return historial;
+}
+
+HistorialClinico& Paciente::getHistorial() {
+    return historial;
+}

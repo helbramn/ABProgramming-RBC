@@ -11,13 +11,24 @@ private:
     std::vector<std::string> recetas;
     std::vector<std::string> cirugias;
 
+    std::string vectorToCSV(const std::vector<std::string>& vec) const;
+    std::vector<std::string> csvToVector(const std::string& csv) const;
+
 public:
     void agregarDiagnostico(const std::string& diagnostico);
     void agregarTratamiento(const std::string& tratamiento); 
     void agregarReceta(const std::string& receta); 
     void agregarCirugia(const std::string& cirugia); 
     void consultarHistorial() const;
-    void buscarPorTipo(const std::string& tipo) const; 
+    void cargarDesdeCSV(const std::string& archivo);
+
+    std::string getDiagnosticosCSV() const;
+    std::string getTratamientosCSV() const;
+    std::string getRecetasCSV() const;
+    std::string getCirugiasCSV() const;
+
+    std::string serializar() const;
+    void deserializar(const std::string& data);
 };
 
 #endif

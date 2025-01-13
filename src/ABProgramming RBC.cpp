@@ -42,20 +42,15 @@ int main() {
     Gestion gestion;
     try {
         inicializarSistema(); 
-        gestion.cargarDesdeArchivo();
+        gestion.cargarPacientes();
+        gestion.cargarMedicos();
+        gestion.cargarCitas();
     }
     catch (const exception& e) {
         cout << "Error al cargar los datos: " << e.what() << endl;
     }
 
     int opcion = 0;
-
-    try {
-        gestion.cargarDesdeArchivo();
-    }
-    catch (const exception& e) {
-        cout << "Error al cargar los datos: " << e.what() << endl;
-    }
 
     do {
         mostrarMenu();
@@ -83,6 +78,7 @@ int main() {
             std::cout << "Ingrese el ID del paciente: ";
             std::cin >> idPaciente;
             gestion.consultarHistorial(idPaciente);
+            break;
         }
         case 5: {
             string tipoReporte;
@@ -95,7 +91,9 @@ int main() {
         }
 
         case 6:
-            gestion.guardarEnArchivo();
+            gestion.guardarPacientes();
+            gestion.guardarMedicos();
+            gestion.guardarCitas();
             cout << "Datos guardados. Saliendo del sistema..." << endl;
             break;
         default:
