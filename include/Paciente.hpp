@@ -21,7 +21,7 @@ public:
     const HistorialClinico& getHistorial() const;
     HistorialClinico& getHistorial();
     void modificarDatos();
-    bool validarDNI(const std::string& dni);  
+    static bool validarDNI(const std::string& dni);  
     bool buscarPaciente(const std::string& criterio);
 
 

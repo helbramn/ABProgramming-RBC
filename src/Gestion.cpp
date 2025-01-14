@@ -4,6 +4,7 @@
 #include <algorithm> 
 #include <sstream> 
 #include <vector>
+#include <regex>
 
 Gestion::Gestion() {}
 Gestion::~Gestion() {
@@ -17,28 +18,72 @@ const std::vector<Paciente*>& Gestion::getPacientes() const {
 }
 
 void Gestion::registrarPaciente() {
-    std::string nombre, dni, fechaIngreso, diagnosticos;
+    std::string nombre, dni, fechaIngreso;
+    Paciente* nuevoPaciente = nullptr;
     std::cout << "Ingrese el nombre del paciente: ";
     std::cin.ignore();
     std::getline(std::cin, nombre); 
+    do {
     std::cout << "Ingrese el DNI del paciente: ";
     std::getline(std::cin, dni);
+    try {
+        if (!Paciente::validarDNI(dni)) {
+            throw std::invalid_argument("Formato de DNI invalido.");
+        }
+    }
+    catch (const std::invalid_argument& e) {
+        std::cout << e.what() << " Intente nuevamente.\n";
+        dni.clear();
+    }
+    } while (dni.empty());
+    do {
     std::cout << "Ingrese la fecha de ingreso (YYYY-MM-DD): ";
     std::getline(std::cin, fechaIngreso);
-
-    pacientes.push_back(new Paciente(nombre, dni, fechaIngreso));
-    std::cout << "Paciente registrado con exito." << std::endl;
-
-    auto it = std::find_if(pacientes.begin(), pacientes.end(), [&](Paciente* p) {
-        return p->getDNI() == dni;
-        });
-
-    if (it != pacientes.end()) {
-        std::cout << "El paciente ya está registrado con este DNI." << std::endl;
-        return;
+    if (!validarFecha(fechaIngreso)) {
+        std::cout << "Formato de fecha invalido. Intente nuevamente.\n";
+        fechaIngreso.clear(); 
     }
+    } while (fechaIngreso.empty());
+    nuevoPaciente = new Paciente(nombre, dni, fechaIngreso);
+    char opcion;
+    std::cout << "¿Desea agregar historial clinico para este paciente? (S/N): ";
+    std::cin >> opcion;
+    if (toupper(opcion) == 'S') {
+        std::cin.ignore();
+        std::string diagnostico;
+        std::cout << "Ingrese los diagnosticos separados por ';': ";
+        std::getline(std::cin, diagnostico);
+        nuevoPaciente->getHistorial().procesarDiagnosticos(diagnostico);
 
+        std::string tratamiento;
+        std::cout << "Ingrese los tratamientos separados por ';': ";
+        std::getline(std::cin, tratamiento);
+        nuevoPaciente->getHistorial().procesarTratamientos(tratamiento);
 
+        std::string receta;
+        std::cout << "Ingrese las recetas separadas por ';': ";
+        std::getline(std::cin, receta);
+        nuevoPaciente->getHistorial().procesarRecetas(receta);
+
+        std::string cirugia;
+        std::cout << "Ingrese las cirugias separadas por ';': ";
+        std::getline(std::cin, cirugia);
+        nuevoPaciente->getHistorial().procesarCirugias(cirugia);
+    }
+    pacientes.push_back(nuevoPaciente);
+
+    std::cout << "\nPaciente registrado con éxito. Datos:\n";
+    std::cout << "ID: " << nuevoPaciente->getID() << "\n";
+    std::cout << "Nombre: " << nuevoPaciente->getNombre() << "\n";
+    std::cout << "DNI: " << nuevoPaciente->getDNI() << "\n";
+    std::cout << "Fecha de Ingreso: " << nuevoPaciente->getFechaIngreso() << "\n";
+    std::cout << "Historial Clínico: \n";
+    nuevoPaciente->consultarHistorial();
+}
+
+bool Gestion::validarFecha(const std::string& fecha) {
+    std::regex fechaRegex("^\\d{4}-\\d{2}-\\d{2}$");
+    return std::regex_match(fecha, fechaRegex);
 }
 
 void Gestion::generarReporte(const std::string& tipo) {
@@ -178,7 +223,10 @@ void Gestion::cargarPacientes() {
         getline(stream, cirugias, ',');
 
         Paciente* nuevoPaciente = new Paciente(nombre, dni, fechaIngreso);
-        nuevoPaciente->getHistorial().cargarDesdeCSV(diagnosticos, tratamientos, recetas, cirugias);
+        nuevoPaciente->getHistorial().procesarDiagnosticos(diagnosticos);
+        nuevoPaciente->getHistorial().procesarTratamientos(tratamientos);
+        nuevoPaciente->getHistorial().procesarRecetas(recetas);
+        nuevoPaciente->getHistorial().procesarCirugias(cirugias);
         pacientes.push_back(nuevoPaciente);
     }
 

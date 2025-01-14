@@ -130,3 +130,32 @@ std::string HistorialClinico::getCirugiasCSV() const {
     return csv;
 }
 
+void HistorialClinico::procesarDiagnosticos(const std::string& csv) {
+    auto diagnosticos = csvToVector(csv);
+    for (const auto& d : diagnosticos) {
+        agregarDiagnostico(d);
+    }
+}
+
+void HistorialClinico::procesarTratamientos(const std::string& csv) {
+    auto tratamientos = csvToVector(csv);
+    for (const auto& t : tratamientos) {
+        agregarTratamiento(t);
+    }
+}
+
+void HistorialClinico::procesarRecetas(const std::string& csv) {
+    auto recetas = csvToVector(csv);
+    for (const auto& r : recetas) {
+        agregarReceta(r);
+    }
+}
+
+void HistorialClinico::procesarCirugias(const std::string& csv) {
+    auto cirugias = csvToVector(csv);
+    for (const auto& c : cirugias) {
+        agregarCirugia(c);
+    }
+}
+
+

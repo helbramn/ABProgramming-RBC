@@ -20,7 +20,10 @@ public:
     void agregarReceta(const std::string& receta); 
     void agregarCirugia(const std::string& cirugia); 
     void consultarHistorial() const;
-    void cargarDesdeCSV(const std::string& archivo);
+    void procesarDiagnosticos(const std::string& csv);
+    void procesarTratamientos(const std::string& csv);
+    void procesarRecetas(const std::string& csv);
+    void procesarCirugias(const std::string& csv);
 
     std::string getDiagnosticosCSV() const;
     std::string getTratamientosCSV() const;
