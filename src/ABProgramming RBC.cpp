@@ -7,6 +7,7 @@
 #include "Cita.hpp"
 #include "HistorialClinico.hpp"
 #include "Gestion.hpp"
+#include "FileManager.hpp"
 
 using namespace std;
 
@@ -24,17 +25,18 @@ void mostrarMenu() {
 }
 
 void inicializarSistema() {
+    FileManager::crearCarpeta();
     std::ofstream archivo;
-    archivo.open("Pacientes.csv", std::ios::app);
+    archivo.open(FileManager::obtenerRutaArchivo("Pacientes.csv"), std::ios::app);
     archivo.close();
 
-    archivo.open("Medicos.csv", std::ios::app);
+    archivo.open(FileManager::obtenerRutaArchivo("Medicos.csv"), std::ios::app);
     archivo.close();
 
-    archivo.open("Citas.csv", std::ios::app);
+    archivo.open(FileManager::obtenerRutaArchivo("Citas.csv"), std::ios::app);
     archivo.close();
 
-    archivo.open("HistorialClinico.csv", std::ios::app);
+    archivo.open(FileManager::obtenerRutaArchivo("HistorialClinico.csv"), std::ios::app);
     archivo.close();
 }
 

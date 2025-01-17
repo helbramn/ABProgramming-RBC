@@ -6,6 +6,7 @@
 #include "Paciente.hpp"
 #include "Medico.hpp"
 #include "Cita.hpp"
+#include "FileManager.hpp"
 
 class Gestion {
 private:

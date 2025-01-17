@@ -5,6 +5,7 @@
 #include <sstream> 
 #include <vector>
 #include <regex>
+#include "FileManager.hpp"
 
 Gestion::Gestion() {}
 Gestion::~Gestion() {
@@ -178,9 +179,12 @@ void Gestion::consultarHistorial(const std::string& idPaciente) {
 }
 
 void Gestion::guardarPacientes() {
-    std::ofstream archivo("Pacientes.csv", std::ios::out);
+    std::string archivoPacientes = FileManager::obtenerRutaArchivo("Pacientes.csv");
+    std::cout << "Guardando pacientes en: " << archivoPacientes << std::endl;
+
+    std::ofstream archivo(archivoPacientes, std::ios::out);
     if (!archivo.is_open()) {
-        std::cerr << "Error al abrir Pacientes.csv para guardar." << std::endl;
+        std::cerr << "Error al abrir " << archivoPacientes << " para guardar." << std::endl;
         return;
     }
 
@@ -201,9 +205,10 @@ void Gestion::guardarPacientes() {
 }
 
 void Gestion::cargarPacientes() {
-    std::ifstream archivo("Pacientes.csv");
+    std::string archivoPaciente = FileManager::obtenerRutaArchivo("Pacientes.csv");
+    std::ifstream archivo(archivoPaciente);
     if (!archivo.is_open()) {
-        std::cerr << "Pacientes.csv no existe o no se puede abrir. Se creará al guardar nuevos pacientes." << std::endl;
+        std::cerr << archivoPaciente << "no existe o no se puede abrir" << std::endl;
         return;
     }
 
@@ -231,20 +236,21 @@ void Gestion::cargarPacientes() {
     }
 
     archivo.close();
-    std::cout << "Pacientes cargados exitosamente desde Pacientes.csv." << std::endl;
+    std::cout << "Pacientes cargados exitosamente " << archivoPaciente<< "." << std::endl;
 }
 
 void Gestion::guardarMedicos() {
-    std::ofstream archivo("Medicos.csv");
+    std::string archivoMedico= FileManager::obtenerRutaArchivo("Medicos.csv");
+    std::ofstream archivo(archivoMedico, std::ios::out);
     if (!archivo.is_open()) {
-        std::cerr << "Error al abrir Medicos.csv para guardar." << std::endl;
+        std::cerr << "Error al abrir " << archivoMedico<< "para guardar." << std::endl;
         return;
     }
-
+    archivo << "Nombre,Especialidad,Disponible\n";
     for (const auto& medico : medicos) {
         archivo << medico->getNombre() << ","
-            << medico->getEspecialidad() << ","
-            << medico->isDisponible() << "\n";
+                << medico->getEspecialidad() << ","
+                <<( medico->isDisponible() ? "1" : "0" )<< "\n";
     }
 
     archivo.close();
@@ -252,13 +258,15 @@ void Gestion::guardarMedicos() {
 }
 
 void Gestion::cargarMedicos() {
-    std::ifstream archivo("Medicos.csv");
+    std::string archivoMedico = FileManager::obtenerRutaArchivo("Medicos.csv");
+    std::ifstream archivo(archivoMedico, std::ios::out);
     if (!archivo.is_open()) {
-        std::cerr << "Medicos.csv no existe o no se puede abrir." << std::endl;
+        std::cerr << archivoMedico << "no existe o no se puede abrir." << std::endl;
         return;
     }
 
     std::string linea;
+    getline(archivo, linea);
     while (std::getline(archivo, linea)) {
         std::istringstream stream(linea);
         std::string nombre, especialidad;
@@ -268,6 +276,7 @@ void Gestion::cargarMedicos() {
         std::getline(stream, especialidad, ',');
         stream >> disponible;
 
+        Medico* nuevoMedico = new Medico(nombre, especialidad, disponible == 1);
         medicos.push_back(new Medico(nombre, especialidad, disponible));
     }
 
@@ -276,16 +285,17 @@ void Gestion::cargarMedicos() {
 }
 
 void Gestion::guardarCitas() {
-    std::ofstream archivo("Citas.csv");
+    std::string archivoCita = FileManager::obtenerRutaArchivo("Citas.csv");
+    std::ofstream archivo(archivoCita, std::ios::out);
     if (!archivo.is_open()) {
-        std::cerr << "Error al abrir Citas.csv para guardar." << std::endl;
+        std::cerr << "Error al abri" << archivoCita << "para guardar." << std::endl;
         return;
     }
-
+    archivo << "Fecha,ID_Paciente,Nombre_Medico\n";
     for (const auto& cita : citas) {
         archivo << cita->getFecha() << ","
-            << cita->getPaciente()->getID() << ","
-            << cita->getMedico()->getNombre() << "\n";
+                << cita->getPaciente()->getID() << ","
+                << cita->getMedico()->getNombre() << "\n";
     }
 
     archivo.close();
@@ -293,13 +303,15 @@ void Gestion::guardarCitas() {
 }
 
 void Gestion::cargarCitas() {
-    std::ifstream archivo("Citas.csv");
+    std::string archivoCita = FileManager::obtenerRutaArchivo("Citas.csv");
+    std::ifstream archivo(archivoCita, std::ios::out);
     if (!archivo.is_open()) {
-        std::cerr << "Citas.csv no existe o no se puede abrir." << std::endl;
+        std::cerr << archivoCita <<"no existe o no se puede abrir." << std::endl;
         return;
     }
 
     std::string linea;
+    getline(archivo, linea);
     while (std::getline(archivo, linea)) {
         std::istringstream stream(linea);
         std::string fecha, hora, idPaciente, nombreMedico;
@@ -311,22 +323,21 @@ void Gestion::cargarCitas() {
         Paciente* paciente = nullptr;
         Medico* medico = nullptr;
 
-        for (const auto& p : pacientes) {
-            if (p->getID() == idPaciente) {
-                paciente = p;
-                break;
-            }
+        auto itPaciente = std::find_if(pacientes.begin(), pacientes.end(), [&idPaciente](Paciente* p) {
+            return p->getID() == idPaciente;
+            });
+        if (itPaciente != pacientes.end()) {
+            paciente = *itPaciente;
         }
-
-        for (const auto& m : medicos) {
-            if (m->getNombre() == nombreMedico) {
-                medico = m;
-                break;
-            }
+        auto itMedico = std::find_if(medicos.begin(), medicos.end(), [&nombreMedico](Medico* m) {
+            return m->getNombre() == nombreMedico;
+            });
+        if (itMedico != medicos.end()) {
+            medico = *itMedico;
         }
-
         if (paciente && medico) {
-            citas.push_back(new Cita(fecha, paciente, medico));
+            Cita* nuevaCita = new Cita(fecha, paciente, medico);
+            citas.push_back(nuevaCita);
         }
     }
 

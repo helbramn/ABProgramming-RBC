@@ -38,7 +38,7 @@ bool Paciente::validarDNI(const std::string& dni) {
     bool esValido = std::regex_match(dni, dniRegex);
 
     if (!esValido) {
-        std::cout << "DNI inválido. Asegúrese de ingresar 8 dígitos seguidos de una letra." << std::endl;
+        std::cout << "DNI invalido. Asegurese de ingresar 8 digitos seguidos de una letra." << std::endl;
     }
     return esValido;
 }

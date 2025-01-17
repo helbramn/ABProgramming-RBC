@@ -24,6 +24,6 @@ include_directories(include)
 file(GLOB SOURCES "src/*.cpp")
 
 # Crear el ejecutable
-add_executable(ABProgramming ${SOURCES})
+add_executable(ABProgramming ${SOURCES} "src/FileManager.cpp")
 
 
