@@ -1,7 +1,7 @@
 #include "FileManager.hpp"
 #include <iostream>
 
-const std::string FileManager::RUTA_BASE = "C:/Users/usuario/source/repos/ABProgramming RBC/data/";
+const std::string FileManager::RUTA_BASE = "../data/";
 
 void FileManager::crearCarpeta() {
     if (!std::filesystem::exists(RUTA_BASE)) {

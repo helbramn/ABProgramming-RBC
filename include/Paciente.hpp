@@ -6,14 +6,14 @@
 
 class Paciente {
 private:
-    std::string nombre;
+    std::string Pnombre;
     std::string dni;
     std::string id;
     std::string fechaIngreso;
     HistorialClinico historial;
 
 public:
-    Paciente(const std::string& nombre, const std::string& dni, const std::string& fechaIngreso);
+    Paciente(const std::string& Pnombre, const std::string& dni, const std::string& fechaIngreso);
     const std::string& getID() const;
     const std::string& getDNI() const;
     const std::string& getNombre() const;

@@ -35,18 +35,17 @@ void inicializarSistema() {
 
     archivo.open(FileManager::obtenerRutaArchivo("Citas.csv"), std::ios::app);
     archivo.close();
-
-    archivo.open(FileManager::obtenerRutaArchivo("HistorialClinico.csv"), std::ios::app);
-    archivo.close();
 }
 
 int main() {
     Gestion gestion;
     try {
         inicializarSistema(); 
-        gestion.cargarPacientes();
+        std::cout << "Iniciando carga de datos...\n";
+        gestion.cargarPacientes(); 
         gestion.cargarMedicos();
         gestion.cargarCitas();
+        std::cout << "Todos los datos han sido cargados.\n";
     }
     catch (const exception& e) {
         cout << "Error al cargar los datos: " << e.what() << endl;

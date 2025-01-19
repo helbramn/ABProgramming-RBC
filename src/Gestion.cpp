@@ -1,4 +1,4 @@
-#include "Gestion.hpp"
+ï»¿#include "Gestion.hpp"
 #include <iostream>
 #include <fstream>
 #include <algorithm> 
@@ -12,6 +12,10 @@ Gestion::~Gestion() {
     for (auto p : pacientes) delete p;
     for (auto m : medicos) delete m;
     for (auto c : citas) delete c;
+
+    pacientes.clear();
+    medicos.clear();
+    citas.clear();
 }
 
 const std::vector<Paciente*>& Gestion::getPacientes() const {
@@ -19,11 +23,11 @@ const std::vector<Paciente*>& Gestion::getPacientes() const {
 }
 
 void Gestion::registrarPaciente() {
-    std::string nombre, dni, fechaIngreso;
+    std::string Pnombre, dni, fechaIngreso;
     Paciente* nuevoPaciente = nullptr;
     std::cout << "Ingrese el nombre del paciente: ";
     std::cin.ignore();
-    std::getline(std::cin, nombre); 
+    std::getline(std::cin, Pnombre); 
     do {
     std::cout << "Ingrese el DNI del paciente: ";
     std::getline(std::cin, dni);
@@ -45,9 +49,9 @@ void Gestion::registrarPaciente() {
         fechaIngreso.clear(); 
     }
     } while (fechaIngreso.empty());
-    nuevoPaciente = new Paciente(nombre, dni, fechaIngreso);
+    nuevoPaciente = new Paciente(Pnombre, dni, fechaIngreso);
     char opcion;
-    std::cout << "¿Desea agregar historial clinico para este paciente? (S/N): ";
+    std::cout << "Â¿Desea agregar historial clinico para este paciente? (S/N): ";
     std::cin >> opcion;
     if (toupper(opcion) == 'S') {
         std::cin.ignore();
@@ -73,13 +77,21 @@ void Gestion::registrarPaciente() {
     }
     pacientes.push_back(nuevoPaciente);
 
-    std::cout << "\nPaciente registrado con éxito. Datos:\n";
+    std::cout << "\nPaciente registrado con Ã©xito. Datos:\n";
     std::cout << "ID: " << nuevoPaciente->getID() << "\n";
     std::cout << "Nombre: " << nuevoPaciente->getNombre() << "\n";
     std::cout << "DNI: " << nuevoPaciente->getDNI() << "\n";
     std::cout << "Fecha de Ingreso: " << nuevoPaciente->getFechaIngreso() << "\n";
-    std::cout << "Historial Clínico: \n";
+    std::cout << "Historial ClÃ­nico: \n";
     nuevoPaciente->consultarHistorial();
+
+    auto it = std::find_if(pacientes.begin(), pacientes.end(), [&](Paciente* p) {
+        return p->getDNI() == dni;
+        });
+    if (it != pacientes.end()) {
+        std::cout << "El paciente con DNI " << dni << " ya estÃ¡ registrado.\n";
+        return;
+    }
 }
 
 bool Gestion::validarFecha(const std::string& fecha) {
@@ -106,29 +118,37 @@ void Gestion::generarReporte(const std::string& tipo) {
 }
 
 void Gestion::registrarMedico() {
-    std::string nombre, especialidad;
+    std::string Mnombre, especialidad;
     bool disponible;
 
     std::cout << "Ingrese el nombre del medico: ";
     std::cin.ignore();
-    std::getline(std::cin, nombre);
+    std::getline(std::cin, Mnombre);
 
     std::cout << "Ingrese la especialidad del medico: ";
     std::getline(std::cin, especialidad);
 
-    std::cout << "¿Esta disponible el medico? (1 para Si, 0 para No): ";
+    std::cout << "Â¿Esta disponible el medico? (1 para Si, 0 para No): ";
     std::cin >> disponible;
 
-    Medico* nuevoMedico = new Medico(nombre, especialidad, disponible);
+    Medico* nuevoMedico = new Medico(Mnombre, especialidad, disponible);
     medicos.push_back(nuevoMedico);
     std::cout << "Medico registrado con exito." << std::endl;
+
+    auto it = std::find_if(medicos.begin(), medicos.end(), [&](Medico* p) {
+        return p->getNombre() == Mnombre;
+        });
+    if (it != medicos.end()) {
+        std::cout << "El medico con nombre " << Mnombre << " ya estÃ¡ registrado.\n";
+        return;
+    }
 }
 
 void Gestion::agendarCita() {
-    std::string dniPaciente, nombreMedico, fecha;
+    std::string getID, nombreMedico, fecha;
 
-    std::cout << "Ingrese el DNI del paciente: ";
-    std::cin >> dniPaciente;
+    std::cout << "Ingrese el ID del paciente: ";
+    std::cin >> getID;
     std::cout << "Ingrese el nombre del medico: ";
     std::cin.ignore();
     std::getline(std::cin, nombreMedico);
@@ -137,7 +157,7 @@ void Gestion::agendarCita() {
 
 
     auto itPaciente = std::find_if(pacientes.begin(), pacientes.end(), [&](Paciente* p) {
-        return p->getID() == dniPaciente;
+        return p->getID() == getID;
         });
 
     if (itPaciente == pacientes.end()) {
@@ -155,7 +175,7 @@ void Gestion::agendarCita() {
     }
 
     if (!(*itMedico)->isDisponible()) {
-        std::cout << "El medico no está disponible para agendar citas." << std::endl;
+        std::cout << "El medico no estÃ¡ disponible para agendar citas." << std::endl;
         return;
     }
 
@@ -182,7 +202,8 @@ void Gestion::guardarPacientes() {
     std::string archivoPacientes = FileManager::obtenerRutaArchivo("Pacientes.csv");
     std::cout << "Guardando pacientes en: " << archivoPacientes << std::endl;
 
-    std::ofstream archivo(archivoPacientes, std::ios::out);
+    std::ofstream archivo(archivoPacientes, std::ios::app);
+    archivo << "ID,DNI,Nombre,FechaIngreso,Diagnosticos,Tratamientos,Recetas,Cirugias\n";
     if (!archivo.is_open()) {
         std::cerr << "Error al abrir " << archivoPacientes << " para guardar." << std::endl;
         return;
@@ -194,10 +215,10 @@ void Gestion::guardarPacientes() {
             << paciente->getDNI() << ","
             << paciente->getNombre() << ","
             << paciente->getFechaIngreso() << ","
-            << paciente->getHistorial().getDiagnosticosCSV() << ","
-            << paciente->getHistorial().getTratamientosCSV() << ","
-            << paciente->getHistorial().getRecetasCSV() << ","
-            << paciente->getHistorial().getCirugiasCSV() << "\n";
+            << (paciente->getHistorial().getDiagnosticosCSV().empty() ? "desconocido" : paciente->getHistorial().getDiagnosticosCSV()) << ","
+            << (paciente->getHistorial().getTratamientosCSV().empty() ? "desconocido" : paciente->getHistorial().getTratamientosCSV()) << ","
+            << (paciente->getHistorial().getRecetasCSV().empty() ? "desconocido" : paciente->getHistorial().getRecetasCSV()) << ","
+            << (paciente->getHistorial().getCirugiasCSV().empty() ? "desconocido" : paciente->getHistorial().getCirugiasCSV()) << "\n";
     }
 
     archivo.close();
@@ -206,33 +227,52 @@ void Gestion::guardarPacientes() {
 
 void Gestion::cargarPacientes() {
     std::string archivoPaciente = FileManager::obtenerRutaArchivo("Pacientes.csv");
-    std::ifstream archivo(archivoPaciente);
+    std::ifstream archivo(archivoPaciente, std::ios::in);
     if (!archivo.is_open()) {
         std::cerr << archivoPaciente << "no existe o no se puede abrir" << std::endl;
         return;
     }
+    pacientes.clear(); 
 
     std::string linea;
-    getline(archivo, linea);
+    std::getline(archivo, linea);
     while (std::getline(archivo, linea)) {
         std::istringstream stream(linea);
         std::string id, nombre, dni, fechaIngreso, diagnosticos, tratamientos, recetas, cirugias;;
 
         getline(stream, id, ',');
-        getline(stream, nombre, ',');
         getline(stream, dni, ',');
+        getline(stream, nombre, ',');
         getline(stream, fechaIngreso, ',');
         getline(stream, diagnosticos, ',');
         getline(stream, tratamientos, ',');
         getline(stream, recetas, ',');
         getline(stream, cirugias, ',');
 
-        Paciente* nuevoPaciente = new Paciente(nombre, dni, fechaIngreso);
-        nuevoPaciente->getHistorial().procesarDiagnosticos(diagnosticos);
-        nuevoPaciente->getHistorial().procesarTratamientos(tratamientos);
-        nuevoPaciente->getHistorial().procesarRecetas(recetas);
-        nuevoPaciente->getHistorial().procesarCirugias(cirugias);
-        pacientes.push_back(nuevoPaciente);
+        if (recetas.empty())  recetas = "Desconocido";
+        if (diagnosticos.empty()) diagnosticos = "Desconocido";
+        if (tratamientos.empty()) tratamientos = "Desconocido";
+        if (cirugias.empty())  cirugias = "Desconocido";   
+
+        auto it = std::find_if(pacientes.begin(), pacientes.end(), [&id](Paciente* p) {
+            return p->getID() == id;
+            });
+        if (it != pacientes.end()) {
+            std::cerr << "El paciente con ID " << id << " ya existe. Saltando...\n";
+            continue;
+        }  
+        try {
+            Paciente* nuevoPaciente = new Paciente(nombre, dni, fechaIngreso);
+            nuevoPaciente->getHistorial().procesarDiagnosticos(diagnosticos);
+            nuevoPaciente->getHistorial().procesarTratamientos(tratamientos);
+            nuevoPaciente->getHistorial().procesarRecetas(recetas);
+            nuevoPaciente->getHistorial().procesarCirugias(cirugias);
+            pacientes.push_back(nuevoPaciente);
+        }
+        catch (const std::exception& e) {
+            std::cerr << "Error al cargar paciente: " << e.what() << ". Saltando registro.\n";
+            continue;
+        }
     }
 
     archivo.close();
@@ -259,7 +299,7 @@ void Gestion::guardarMedicos() {
 
 void Gestion::cargarMedicos() {
     std::string archivoMedico = FileManager::obtenerRutaArchivo("Medicos.csv");
-    std::ifstream archivo(archivoMedico, std::ios::out);
+    std::ifstream archivo(archivoMedico, std::ios::in);
     if (!archivo.is_open()) {
         std::cerr << archivoMedico << "no existe o no se puede abrir." << std::endl;
         return;
@@ -276,10 +316,17 @@ void Gestion::cargarMedicos() {
         std::getline(stream, especialidad, ',');
         stream >> disponible;
 
+        auto it = std::find_if(medicos.begin(), medicos.end(), [&nombre](Medico* m) {
+            return m->getNombre() == nombre;
+            });
+        if (it != medicos.end()) {
+            std::cerr << "El mÃ©dico con nombre " << nombre << " ya existe. Saltando...\n";
+            continue;
+        }
+
         Medico* nuevoMedico = new Medico(nombre, especialidad, disponible == 1);
         medicos.push_back(new Medico(nombre, especialidad, disponible));
     }
-
     archivo.close();
     std::cout << "Medicos cargados exitosamente desde Medicos.csv." << std::endl;
 }
@@ -344,5 +391,6 @@ void Gestion::cargarCitas() {
     archivo.close();
     std::cout << "Citas cargadas exitosamente desde Citas.csv." << std::endl;
 }
+
 
 
